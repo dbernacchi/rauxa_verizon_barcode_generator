@@ -1,0 +1,39 @@
+
+body {
+	padding:40px;
+}
+
+.navbar-brand {
+	padding:15px;
+}
+
+.navbar-brand img {
+	width:155px;
+}
+
+label {
+	text-transform: uppercase;
+}
+
+.btns-right {
+	padding-right:20px;
+}
+
+.form-wrap {
+	max-width:900px;
+	background-color:rgb(240,240,240);
+	border-radius:5px;
+	
+}
+.form-wrap .row {
+	padding:5px 0px;
+}
+.form-wrap .modal-dialog {
+	width:unset;
+	margin:0px auto;
+}
+
+.form-wrap .modal-content {
+	box-shadow:unset;
+	background-color:transparent;
+}
