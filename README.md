@@ -31,3 +31,5 @@ be sure to create the database
 same as Local
 set .env DB_PORT to 3306
 set .env APP_URL to the right url
+
+Init Password - "rauxa#1"
