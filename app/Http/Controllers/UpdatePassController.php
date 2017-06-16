@@ -18,10 +18,36 @@ class UpdatePassController extends Controller
 	    $old_pass = $request->input('oldP');
 	    $conf_pass = $request->input('confP');
 	    
+/*
 	    if(trim($old_pass) != trim($new_pass)){
 		    
+		    $jsonResponse = (object)[
+				'errcode' => true, 
+				'msg' => 'Ooops, new password did not match the confirmation.'
+			];
 	    }
+*/
 	    
+	    $old_pass_chk = DB::select('select val from rxa_settings where type = "passcode"');
+	    if (Hash::check( $old_pass, $old_pass_chk[0]->val )) {
+		    
+		   $hash = Hash::make($new_pass);
+		   DB::update('update rxa_settings set val = "'.$hash.'" where type = "passcode" ');
+		   
+		    $jsonResponse = (object)[
+				'errcode' => false, 
+				'msg' => 'Your password was updated'
+			];
+			
+		}else{
+			
+			$jsonResponse = (object)[
+				'errcode' => true, 
+				'msg' => 'Ooops, There was an issue updating the password. Please make sure that your old password was correct.'
+			];
+		}
+	    
+/*
 	    $old_pass_chk = DB::select('select val from rxa_settings where type = "passcode"');
 	    
 	    if (Hash::check( $new_pass, $old_pass_chk[0]->val )) {
@@ -40,6 +66,7 @@ class UpdatePassController extends Controller
 				'msg' => 'Ooops, There was an issue updating the password. Please make sure that your old password was correct.'
 			];
 		}
+*/
 		
 		if($request->ajax()) {
 			return response()->json($jsonResponse);		
