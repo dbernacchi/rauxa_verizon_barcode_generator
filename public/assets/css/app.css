@@ -37,3 +37,46 @@ label {
 	box-shadow:unset;
 	background-color:transparent;
 }
+
+.form-wrap .alert,
+.modal .alert {display:none;}
+
+.group-id-cnt,
+.barcode-id-cnt {
+	display:none;
+}
+
+.file-drawer {
+	text-align:left;
+}
+
+.file-drawer .fa {
+	font-size:24px;
+	display:inline-block;
+	vertical-align:middle;
+	margin-right:10px;
+}
+.file-drawer .file-name {
+	display:inline-block;
+	vertical-align:middle;
+	font-size:12px;
+}
+
+.file-drawer .file-icon {
+	display:inline-block;
+	vertical-align:middle;
+	text-align:center;
+	margin:5px 5px;
+	border-radius:5px;
+	background-color:#ccc;
+	padding:10px;
+}
+
+.file-drawer .file-icon:hover {
+	background-color:#c5c5c5;
+}
+
+#file-wrap {
+
+	padding:20px 10px 40px;
+}
