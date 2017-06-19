@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,11 +14,19 @@ class AddActionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rxa_actions', function (Blueprint $table) {
-            $table->primary('id');
-            $table->char('name', 45);
-            $table->timestamps('datetime');
-        });
+	    if (!Schema::hasTable('rxa_actions')) {
+		    
+	        Schema::create('rxa_actions', function (Blueprint $table) {
+	            $table->increments('id');
+	            $table->char('name', 45)->nullable();
+	        });
+	        
+	        DB::table('rxa_actions')->insert([
+			    ['name' => 'Append'],
+			    ['name' => 'Replace'],
+			]);
+	    }
+
     }
 
     /**

@@ -16,20 +16,26 @@ class LoginController extends Controller
     public function validateUser(Request $request){
 	    
 	    $pass = $request->input('p');
-	    
 	   
 	    $old_pass_chk = DB::select('select val from rxa_settings where type = "passcode"');
 	    
 	    if (Hash::check( $pass, $old_pass_chk[0]->val )) {
 		    
-		    //$request->session()->put('user', 1);
+		    session(['init-token' => true]);
 		    
-			return redirect('home');
+		    $jsonResponse = (object)[
+					'errcode' => false, 
+				];
 			
 		}else{
 			
-			return redirect('/');
+			$jsonResponse = (object)[
+					'errcode' => true, 
+					'msg' => 'Your password did not match our records.',
+				];
 		}
+		
+		return response()->json($jsonResponse);
 		
     }
 }

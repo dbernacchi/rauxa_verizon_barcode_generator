@@ -1,7 +1,7 @@
 @extends('login')
 
 @section('main-body')
-	<form action="/" method="post">
+	<form id="frm-login" action="/" method="post">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 			<div class="container form-wrap">
 				<div class="modal-dialog">

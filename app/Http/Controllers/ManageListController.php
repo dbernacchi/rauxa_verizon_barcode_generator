@@ -15,11 +15,20 @@ class ManageListController extends Controller
 	
 	public function manageLists(Request $request, $type){
 		
+		$logged = session('init-token');
+		
+		if(empty($logged)){
+			
+			return redirect('/');
+		}
+		
 		$tble = 'rxa_'.$type;
 		
 		$del = DB::delete('delete from '.$tble);
 		
 		$list = $request->all();
+		
+		
 		
 		if(!empty($list)){
 			
@@ -29,7 +38,7 @@ class ManageListController extends Controller
 				
 				DB::insert('insert into '.$tble.' (name) values (?)', [$val]);
 			}
-			
+		
 			$jsonResponse = (object)[
 				'errcode' => false, 
 				'msg' => 'Your '.$type.' list has been updated'

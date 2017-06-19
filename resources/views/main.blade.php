@@ -19,7 +19,7 @@
             <nav class="navbar navbar-inverse">
 			  <div class="container-fluid">
 			    <div class="navbar-header">
-			      <a class="navbar-brand" href="#">
+			      <a class="navbar-brand" href="/home">
 			        <img alt="Rauxa" src="/assets/img/logo.png">
 			      </a>
 			    </div>
@@ -37,10 +37,11 @@
 							
 		</div>
 		@yield('templates')
-    </body>
-    
-    
 		<script type='text/javascript' src="/assets/js/app.js"></script>
 		<script type='text/javascript' src="/assets/js/formdata.js"></script>
 		<script type='text/javascript' src="/assets/js/master.js"></script>
+    </body>
+    
+    
+
 </html>

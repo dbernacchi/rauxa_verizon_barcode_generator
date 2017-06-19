@@ -13,21 +13,25 @@ class AddListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rxa_lists', function (Blueprint $table) {
-            $table->primary('id');
-            $table->char('client_name', 50);
-            $table->char('market', 50);
-            $table->char('vendor', 50);
-            $table->char('action', 25);
-            $table->char('group_id', 20);
-            $table->char('barcode_id', 20);
-            $table->char('split_num', 12);
-            $table->char('total', 12);
-            $table->char('gid', 20);
-            $table->char('bid', 20);
-            $table->integer('last_num');
-            $table->dateTime('datetime');
-        });
+	    if (!Schema::hasTable('rxa_lists')) {
+		    
+	        Schema::create('rxa_lists', function (Blueprint $table) {
+	            $table->increments('id');
+	            $table->char('client_name', 50)->nullable();
+	            $table->char('market', 50)->nullable();
+	            $table->char('vendor', 50)->nullable();
+	            $table->char('action', 25)->nullable();
+	            $table->char('group_id', 20)->nullable();
+	            $table->char('barcode_id', 20)->nullable();
+	            $table->char('split_num', 12)->nullable();
+	            $table->char('total', 12)->nullable();
+	            $table->char('gid', 20)->nullable();
+	            $table->char('bid', 20)->nullable();
+	            $table->integer('last_num')->default(0);
+	            $table->char('file_init', 100)->nullable();
+	            $table->timestamp('datetime')->useCurrent();
+	        });
+		}
     }
 
     /**

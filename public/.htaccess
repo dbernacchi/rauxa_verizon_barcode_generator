@@ -19,3 +19,8 @@
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 </IfModule>
 
+<FilesMatch “\.(txt|UNL|csv|pdf)$“>
+   ForceType application/octet-stream
+   Header set Content-Disposition attachment
+</FilesMatch>
+

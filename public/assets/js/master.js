@@ -3,120 +3,229 @@ var $ = jQuery.noConflict();
 $(document).ready(function(){
 	
 	var frm_generator = $('#frm-generator'),
-		frm_alert = frm_generator.find('#gen-msg'),
-		input_group = $('#i_group_id')
-		input_barcode = $('#i_barcode_id'),
-		input_split = $('#i_split_num')
-		input_total = $('#i_total');
+		frm_login = $('#frm-login');
 		
-	submit_form_push(frm_generator, function(obj){
+	if(frm_login.length > 0){
 		
-		var form_wrap = $('#form-wrap'),
-			file_wrap = $('#file-wrap');
-		
-		var files = obj.data,
-			holder = $('#file-holder');
+		submit_form_push(frm_login, function(obj){
 			
-			console.log(form_wrap)
-			console.log(holder)
-			console.log(file_wrap)
-			
-		form_wrap.fadeOut(400, function(){
-			
-			file_wrap.fadeIn(400);
-			
-			$.each(files, function(key, val){
+			if(!obj.errcode){
 				
-				holder.append('<a class="file-icon" href="/storage/'+val.filename+'" target="_blank"><span class="fa fa-file"></span><span class="file-name">'+val.filename+'</span></a>');
-			});
-		})
-	
-		
-	});
-		
-	input_split.on('keyup', function(){
-		
-		var $this = $(this),
-			form_group = $this.closest('div.form-group'),
-			this_val = parseInt($this.val()),
-			len = this_val.length,
-			total_val =  parseInt(input_total.val());
+				window.location.href = "/home";
+			}		
 			
-			
-			
-		if(this_val*2 > total_val){
-			
-			alert_split(true);
-			//toggle_generator_form(false);
-			
-		}else{
-			
-			alert_split(false);
-			//toggle_generator_form(true);
-			
-		}
-	});
-	
-	input_total.on('keyup', function(){
-		
-		check_codes();
-	});
-				
-	input_group.on('keyup', function(){
-		
-		check_codes();
-			
-	});
-	
-	input_barcode.on('keyup', function(){
-		
-		check_codes();
-	});
-	
-	function check_codes(){
-		
-		var barcode_val = input_barcode.val(),
-			group_val = input_group.val(),
-			total_val =  input_total.val();
-		
-		if(group_val != '' && barcode_val != '' && total_val != ''){
-			
-			$.get('/check_codes/'+group_val+'/'+barcode_val+'/'+total_val, function(arr){
-			
-				if(arr.errcode){
-					alert_ids(true);
-					toggle_generator_form(true);
-				}else{
-					alert_ids(false);
-					toggle_generator_form(false);
-				}
-				
-				if(arr.msg){
-					frm_alert.text(arr.msg)
-						.fadeIn(400);
-				}
-			});
-		}
-		
+		});
 	}
 	
-	var alert_ids = function(status, alert){
-		
-		var groupid_input 	= $('#i_group_id'),
-			groupid_parent 	= groupid_input.closest('div.form-group'),
-			barid_input 	= $('#i_barcode_id'),
-			barid_parent 	= barid_input.closest('div.form-group'),
-			total_input 	= $('#i_total_id'),
-			total_parent 	= total_input.closest('div.form-group');
+	
+	if(frm_generator.length > 0){
+	
+		var frm_alert = frm_generator.find('#gen-msg'),
+			input_group = $('#i_group_id')
+			input_barcode = $('#i_barcode_id'),
+			input_split = $('#i_split_num')
+			input_total = $('#i_total'),
+			form_wrap = $('#form-wrap'),
+			loader = $('.loader');
 			
+		check_group_length();
+		check_codes();
+		
+		frm_generator.find('button[type="submit"]').on('mouseup', function(){
+			
+			loader.fadeIn(100, function(){
+				form_wrap.fadeOut(400);
+			})
+		});
+			
+		submit_form_push(frm_generator, function(obj){
+			
+			var file_wrap = $('#file-wrap'),
+				loader = $('.loader');
+			
+			var holder = $('#file-holder');
+			
+			console.log(obj);
+			$i = 1;
+			
+			if(!obj.errcode){
+				
+				var checkfiles = function(){
+					
+					clearTimeout(checkTimer);
+					var checkTimer = setTimeout(function(){
+						
+						$.get('/filecheck/'+obj.filename, function(arr){
+							
+							if($i > 30){
+								clearTimeout(checkTimer);
+							}
+							
+							if(arr.errcode){
+								
+								$i++
+								checkfiles();
+								
+							}else{
+								
+								file_wrap.fadeIn(400, function(){
+					
+									loader.fadeOut(100);
+										
+								});
+								
+								var files = arr.files;
+								
+								$.each(files, function(key, val){
+									console.log(val)
+									holder.append('<a class="file-icon" href="/storage/app/'+val.filename+'" target="_blank"><span class="fa fa-file"></span><span class="file-name">'+val.filename+'</span></a>');
+								
+								});
+								
+								clearTimeout(checkTimer);
+							}
+							
+						}, 'json');
+						
+					}, 2000);
+				}
+				
+				checkfiles();
+				
+				
+			}		
+			
+		});
+		
+		input_split.on('keyup', function(){
+			
+			var $this = $(this),
+				form_group = $this.closest('div.form-group'),
+				this_val = parseInt($this.val()),
+				len = this_val.length,
+				total_val =  parseInt(input_total.val());
+				
+				
+				
+			if(this_val*2 > total_val){
+				
+				alert_split(true);
+				//toggle_generator_form(false);
+				
+			}else{
+				
+				alert_split(false);
+				//toggle_generator_form(true);
+				
+			}
+		});
+	
+		input_total.on('keyup', function(){
+			
+			check_codes();
+		});
+					
+		input_group.on('keyup', function(){
+			
+			check_group_length();
+				
+		});
+		
+		input_barcode.on('keyup', function(){
+			
+			check_codes();
+		});
+	
+		function check_group_length(){
+			
+			var group_val = input_group.val(),
+				groupid_parent 	= input_group.closest('div.form-group');
+			
+			if(group_val.length > 20){
+				
+				frm_alert.text('<Group ID> cannot exceed 20 chrarcters').fadeIn(400);
+				
+				if(!groupid_parent.hasClass('has-warning'))
+					 groupid_parent.addClass('has-warning');
+					 
+				toggle_generator_form(true);
+				
+			}else{
+				
+				if(frm_alert.is(':visible'))
+					frm_alert.text('')
+						.fadeOut(100);
+				
+				if(groupid_parent.hasClass('has-warning'))
+					 groupid_parent.removeClass('has-warning');
+					 
+				toggle_generator_form(false);
+			}
+			
+		}
+	
+		function check_codes(){
+			
+			var barcode_val 	= input_barcode.val(),
+				group_val 		= input_group.val(),
+				total_val 		= input_total.val(),
+				barid_parent 	= input_barcode.closest('div.form-group'),
+				total_parent 	= input_total.closest('div.form-group');;
+			
+			if(group_val != '' && barcode_val != '' && total_val != ''){
+				
+				$.get('/check_codes/'+group_val+'/'+barcode_val+'/'+total_val, function(arr){
+				
+					if(arr.errcode){
+						
+						if(arr.msg)
+							frm_alert.text(arr.msg)
+								.fadeIn(400);
+					
+						if(!total_parent.hasClass('has-warning'))
+							 total_parent.addClass('has-warning');
+							 
+						if(!barid_parent.hasClass('has-warning'))
+							 barid_parent.addClass('has-warning');
+	
+						
+						
+						toggle_generator_form(true);
+						
+					}else{
+						
+						if(frm_alert.is(':visible'))
+							frm_alert.text('')
+								.fadeOut(200);
+						
+						if(total_parent.hasClass('has-warning'))
+							 total_parent.removeClass('has-warning');
+							 
+						if(barid_parent.hasClass('has-warning'))
+							 barid_parent.removeClass('has-warning');
+							 
+						toggle_generator_form(false);
+						
+					}
+				});
+			}
+		}
+	
+/*
+	var alert_codes = function(status, alert){
+		
+		var barid_input 	= $('#i_barcode_id'),
+			barid_parent 	= barid_input.closest('div.form-group'),
+			total_input 	= $('#i_total'),
+			total_parent 	= total_input.closest('div.form-group');
 		
 		if(status){
 			
 			frm_alert.text(alert)
 				.fadeIn(400);
 			
-			if(!groupid_parent.hasClass('has-warning'))
-				 groupid_parent.addClass('has-warning');
+			if(!total_parent.hasClass('has-warning'))
+				 total_parent.addClass('has-warning');
 				 
 			if(!barid_parent.hasClass('has-warning'))
 				 barid_parent.addClass('has-warning');
@@ -125,10 +234,10 @@ $(document).ready(function(){
 			
 			if(frm_alert.is(':visible'))
 				frm_alert.text('')
-					.fadeOut(400);
+					.fadeOut(200);	
 					
-			if(groupid_parent.hasClass('has-warning'))
-				 groupid_parent.removeClass('has-warning');
+			if(total_parent.hasClass('has-warning'))
+				 total_parent.removeClass('has-warning');
 				 
 			if(barid_parent.hasClass('has-warning'))
 				 barid_parent.removeClass('has-warning');
@@ -136,42 +245,46 @@ $(document).ready(function(){
 		}
 		
 	}
+*/
 	
-	var alert_split = function(status){
-		
-		var split_input = $('#i_split_num'),
-			split_parent 	= split_input.closest('div.form-group');
+	
+	
+		var alert_split = function(status){
 			
-		var alert_adjust = 'The split amount must be less than or equal to half of the total number of codes.';
-		
-		if(status){
+			var split_input = $('#i_split_num'),
+				split_parent 	= split_input.closest('div.form-group');
+				
+			var alert_adjust = 'The split amount must be less than or equal to half of the total number of codes.';
 			
-			frm_alert.text(alert_adjust)
-				.fadeIn(400);
-			
-			if(!split_parent.hasClass('has-warning'))
-				 split_parent.addClass('has-warning');
-				 
-		}else{
-			
-			if(frm_alert.is(':visible'))
-				frm_alert.text('')
-					.fadeOut(400);
-					
-			if(split_parent.hasClass('has-warning'))
-				 split_parent.removeClass('has-warning');
+			if(status){
+				
+				frm_alert.text(alert_adjust)
+					.fadeIn(400);
+				
+				if(!split_parent.hasClass('has-warning'))
+					 split_parent.addClass('has-warning');
+					 
+			}else{
+				
+				if(frm_alert.is(':visible'))
+					frm_alert.text('')
+						.fadeOut(400);
+						
+				if(split_parent.hasClass('has-warning'))
+					 split_parent.removeClass('has-warning');
+				
+			}
 			
 		}
 		
-	}
-	
-	function toggle_generator_form(status){
-		
-		var btn = frm_generator.find('button[type="submit"]');
-		if(status){
-			btn.prop('disabled',true);
-		}else{
-			btn.prop('disabled',false);
+		function toggle_generator_form(status){
+			
+			var btn = frm_generator.find('button[type="submit"]');
+			if(status){
+				btn.prop('disabled',true);
+			}else{
+				btn.prop('disabled',false);
+			}
 		}
 	}
 
@@ -191,7 +304,7 @@ $(document).ready(function(){
 			var open_popover = $('.popover.in');
 	
 			$('*').one('click', function(){
-				open_popover.popover('destroy');
+				open_popover.popover('hide');
 			});
 		});
 	});
@@ -432,6 +545,7 @@ $.fn.open_modal = function(callback){
 			submit_form_push(html.find('form'), function(){
 				
 				html.modal('hide');
+				location.reload();
 			});
 			
 			if(typeof callback == 'function'){
