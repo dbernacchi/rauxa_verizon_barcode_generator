@@ -27,6 +27,7 @@
 	<form id="frm-generator" action="/generate" method="post">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		<div class="container form-wrap">
+			<div class="loader"><img src="/assets/img/default.gif"></div>
 			<div class="modal-dialog" id="form-wrap">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -41,7 +42,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_client_name">Client Name</label>
 								<div class="col-md-8">
-									<input type="text" class="form-control input-sm" id="i_client_name" name="client_name" placeholder="Enter the Client Name" value="{{ (!empty($list) ? $list[0]->client_name : '') }}" required>
+									<input type="text" class="form-control input-sm" id="i_client_name" name="client_name" placeholder="Enter the Client Name" value="{{ (!empty($list) ? $list[0]->client_name : '') }}" tabindex="1" required>
 								</div>
 								<div class="col-md-1">
 									<button type="button" class="btn btn-warning btn-sm" data-container="body" data-toggle="popover" title="Info" data-content="{{ $popovers->client_name }}">
@@ -55,7 +56,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_vendor">Vendor</label>
 								<div class="col-md-8">
-									<select class="form-control input-sm" id="i_vendor" name="vendor" required>
+									<select class="form-control input-sm" id="i_vendor" name="vendor" tabindex="2" required>
 									    <option value="">Select Vendor</option>
 										     @foreach ($vendor_list as $vendor)
 										    	<option value="{{ $vendor->name }}"{{ !empty($list) && $vendor->name == $list[0]->vendor ? " selected" : "" }}>{{ $vendor->name }}</option>
@@ -74,7 +75,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_vendor">Market</label>
 								<div class="col-md-8">
-									<select class="form-control input-sm" id="i_market" name="market" required>
+									<select class="form-control input-sm" id="i_market" name="market" tabindex="3" required>
 									    <option value="">Select Area</option>
 									    @foreach ($market_list as $market)
 									    	<option value="{{ $market->name }}" {{ !empty($list) && $market->name == $list[0]->market ? " selected" : "" }}>{{ $market->name }}</option>
@@ -95,7 +96,7 @@
 								<label class="col-md-3 control-label" for="i_action">Action</label>
 						
 								<div class="col-md-8">
-									<select class="form-control input-sm" id="i_action" name="action" required>
+									<select class="form-control input-sm" id="i_action" name="action" tabindex="4" required>
 									    <option value="">Select One</option>
 									    @foreach ($action_list as $action)
 									    	<option value="{{ $action->name }}" {{ !empty($list) && $action->name == $list[0]->action ? " selected" : "" }}>{{ $action->name }}</option>
@@ -114,7 +115,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_action">Group ID</label>
 								<div class="col-md-8">
-									<input type="text" class="form-control input-sm" id="i_group_id" name="group_id" placeholder="Enter the Group ID" pattern="[a-zA-Z0-9_-]{1,20}" value="{{ !empty($list) ? $list[0]->group_id : '' }}" required>
+									<input type="text" class="form-control input-sm" id="i_group_id" name="group_id" placeholder="Enter the Group ID" pattern="[a-zA-Z0-9_-]{1,20}" value="{{ !empty($list) ? $list[0]->group_id : '' }}" tabindex="5" required>
 									<span class="group-id-cnt"></span>
 								</div>
 								<div class="col-md-1">
@@ -129,7 +130,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_barcode_id">Barcode ID</label>
 								<div class="col-md-8">
-									<input type="text" class="form-control input-sm" id="i_barcode_id" name="barcode_id" placeholder="Enter the Barcode ID" pattern="[a-zA-Z0-9_-]{1,20}" value="{{ !empty($list) ? $list[0]->barcode_id : '' }}" required>
+									<input type="text" class="form-control input-sm" id="i_barcode_id" name="barcode_id" placeholder="Enter the Barcode ID" pattern="[a-zA-Z0-9_-]{1,20}" value="{{ !empty($list) ? $list[0]->barcode_id : '' }}" tabindex="6" required>
 									<span class="barcode-id-cnt"></span>
 								</div>
 								<div class="col-md-1">
@@ -145,7 +146,7 @@
 								<label class="col-md-3 control-label" for="i_split_num">Split Codes Amount</label>
 							
 								<div class="col-md-8">
-									<input type="text" class="form-control input-sm" id="i_split_num" name="split_num" placeholder="(optional) Enter Number of codes to split between files" value="{{ !empty($list) ? $list[0]->split_num : '' }}">
+									<input type="text" class="form-control input-sm" id="i_split_num" name="split_num" placeholder="(optional) Enter Number of codes to split between files" value="{{ !empty($list) ? $list[0]->split_num : '' }}" tabindex="7">
 								</div>
 								<div class="col-md-1">
 									<button type="button" class="btn btn-warning btn-sm" data-container="body" data-toggle="popover" title="Info" data-content="{{ $popovers->split_num }}">
@@ -160,7 +161,7 @@
 								<label class="col-md-3 control-label" for="i_total">Total Codes</label>
 							
 								<div class="col-md-8">
-									<input type="text" class="form-control input-sm" id="i_total" name="total" placeholder="Enter Total Number of Codes to Generate" value="{{ !empty($list) ? $list[0]->total : '' }}" required>
+									<input type="text" class="form-control input-sm" id="i_total" name="total" placeholder="Enter Total Number of Codes to Generate" value="{{ !empty($list) ? $list[0]->total : '' }}" tabindex="8" required>
 								</div>
 								<div class="col-md-1">
 									<button type="button" class="btn btn-warning btn-sm" data-container="body" data-toggle="popover" title="Info" data-content="{{ $popovers->total }}">
@@ -174,12 +175,13 @@
 						<div class="form-group">
 							@if (!empty($file_list))
 							
-								<button type="button" class="btn btn-primary">Back To List</button>
+								<a href="/lists" class="btn btn-primary">Back To List</a>
 							
 							@else
 								<button type="submit" class="btn btn-primary">Generate Files</button>
 							@endif
 						</div>
+						
 					</div>
 				</div>
 			</div>

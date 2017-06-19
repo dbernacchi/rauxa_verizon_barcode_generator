@@ -7,8 +7,18 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+	
     public function index(){
 	    
+	   
+	    
+	    $logged = session('init-token');
+		
+		if(empty($logged)){
+			
+			return redirect('/');
+		}
+	    	    
 	    $market_list = DB::select('select * from rxa_markets');
 	    $action_list = DB::select('select * from rxa_actions');
 	    $vendor_list = DB::select('select * from rxa_vendors');

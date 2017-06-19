@@ -14,6 +14,13 @@ class UpdatePassController extends Controller
     
     public function managePass(Request $request){
 	    
+	     $logged = session('init-token');
+		
+		if(empty($logged)){
+			
+			return redirect('/');
+		}
+	    
 	    $new_pass = $request->input('newP');
 	    $old_pass = $request->input('oldP');
 	    $conf_pass = $request->input('confP');

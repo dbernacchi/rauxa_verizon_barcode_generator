@@ -80,3 +80,9 @@ label {
 
 	padding:20px 10px 40px;
 }
+
+.loader {
+	width:100%;
+	display:none;
+	text-align:center;
+}

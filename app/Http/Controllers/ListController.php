@@ -8,7 +8,15 @@ use Illuminate\Pagination\Paginator;
 
 class ListController extends Controller
 {
-    public function index($field = 'client_name', $dir = 'desc', $listtotal = 15){
+	
+	public function index($field = 'client_name', $dir = 'desc', $listtotal = 15){
+		
+		$logged = session('init-token');
+		
+		if(empty($logged)){
+			
+			return redirect('/');
+		}
 	    
 	    $market_list = DB::select('select * from rxa_markets');
 	    $action_list = DB::select('select * from rxa_actions');
@@ -23,13 +31,20 @@ class ListController extends Controller
 	    ->orderBy($field, $dir)
 	    ->paginate($listtotal);
 	    
-	    $dir = ($dir === 'desc' ? 'asc' : 'desc');
+	    $dir = (!empty($dir) && $dir === 'desc' ? 'asc' : 'desc');
 	    
 	    return view('sections.lists', compact('lists','market_list','action_list','vendor_list', 'dir'));
 	    
 	}
 	
 	public function search(Request $request, $listtotal = 15){
+		
+		$logged = session('init-token');
+		
+		if(empty($logged)){
+			
+			return redirect('/');
+		}
 	    
 	    $market_list = DB::select('select * from rxa_markets');
 	    $action_list = DB::select('select * from rxa_actions');
@@ -41,15 +56,20 @@ class ListController extends Controller
 	     			->orWhere('barcode_id', 'like', '%'.$request->input('search').'%')
 	    			->paginate($listtotal);
 	    			
-	    $dir = ($dir === 'desc' ? 'asc' : 'desc');
+	    $dir = (!empty($dir) && $dir === 'desc' ? 'asc' : 'desc');
 	    
 	    return view('sections.lists', compact('lists','market_list','action_list','vendor_list', 'dir'));
 	    
 	}
 	
-	
-	
 	public function openListItem($id){
+		
+		$logged = session('init-token');
+		
+		if(empty($logged)){
+			
+			return redirect('/');
+		}
 	    
 	    $market_list = DB::select('select * from rxa_markets');
 	    $action_list = DB::select('select * from rxa_actions');

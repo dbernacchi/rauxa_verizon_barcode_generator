@@ -13,11 +13,13 @@ class AddFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rxa_files', function (Blueprint $table) {
-            $table->primary('id');
-            $table->char('filename', 150);
-            $table->integer('idlist');
-        });
+	    if (!Schema::hasTable('rxa_files')) {
+	        Schema::create('rxa_files', function (Blueprint $table) {
+	            $table->increments('id');
+	            $table->char('filename', 150)->nullable();
+	            $table->integer('idlist');
+	        });
+	    }
     }
 
     /**
