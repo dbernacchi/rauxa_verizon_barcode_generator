@@ -55,7 +55,7 @@ class ProcessFiles implements ShouldQueue
 		set_time_limit(0);
 		ini_set('memory_limit','-1');
 	    
-	    Log::error('Test'.$this->vendor);
+	   // Log::error('Test'.$this->vendor);
 	    
 	    $list['vendor'] 	= $this->vendor;
         $list['market'] 	= $this->market;;
@@ -143,7 +143,7 @@ class ProcessFiles implements ShouldQueue
 		
 		$start = (!empty($get_last_num_gen[0]) ? $get_last_num_gen[0]->last_num+1 : 1);
 		
-		Log::error('Start:'.$start);
+		//Log::error('Start:'.$start);
 				
 		$i = 1;
 		$max_total = $total;
@@ -173,16 +173,16 @@ class ProcessFiles implements ShouldQueue
 	    // adjust for 0 based array key
 	    $last_num_gen = $start-1;
 	    
-	    Log::info('Last Number Generated:'.$last_num_gen);
+	  //  Log::info('Last Number Generated:'.$last_num_gen);
 		
 		// Set Array Key's before it is shuffled to pull values for filename later.     		    
 	    $key_to_start = 0;
 		$key_to_half = $split-1;
 		$key_to_end = $max_total-1;
 		
-		Log::info('Key to Start:'.$key_to_start);
-		Log::info('Key to Half:'.$last_num_gen);
-		Log::info('Key to End:'.$last_num_gen);
+		//Log::info('Key to Start:'.$key_to_start);
+		//Log::info('Key to Half:'.$last_num_gen);
+		//Log::info('Key to End:'.$last_num_gen);
 		
 		// Set file names
 		
@@ -255,7 +255,7 @@ class ProcessFiles implements ShouldQueue
 		    $list
 		);
 		
-		Log::info($list['file_init']);
+		//Log::info($list['file_init']);
 		
 		if(!empty($split)){
 			
@@ -268,7 +268,7 @@ class ProcessFiles implements ShouldQueue
 			     ['idlist' => $newID, 'filename' => $directory.$filename6.'.txt']
 			]);
 			
-			Log::info('With Split');
+			//Log::info('With Split');
 			
 		}else{
 			
@@ -279,7 +279,7 @@ class ProcessFiles implements ShouldQueue
 			     ['idlist' => $newID, 'filename' => $directory.$filename3.'.csv'],
 			]);
 			
-			Log::info('Without Split');
+			//Log::info('Without Split');
 		}
 
         

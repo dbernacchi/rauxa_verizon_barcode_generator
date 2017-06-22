@@ -27,32 +27,11 @@ class GenerateController extends Controller
 
 			$list = $request->all();
 
-			
-			//ob_start();
-			
-						
-			
-			
-/*
-			$jsonResponse = json_encode($jsonResponse);
-			
-			print_r($jsonResponse);
-*/
-			
-			//header('Connection: close');
-			//header('Content-Length: '.ob_get_length());
-
-			
-			//ob_end_flush();
-/*
-			ob_flush();
-			flush();
-*/
-			Log::error('Previous to Dispatch');
+			//Log::error('Previous to Dispatch');
 			
 			dispatch( new ProcessFiles( $list['vendor'], $list['market'], $list['action'], $list['group_id'], $list['barcode_id'], $list['total'], $list['split_num'] ) );
 			
-			Log::error('After Displatch');
+			//Log::error('After Displatch');
 			
 			$inital_filename = $list['vendor'].'_'.date('Ymd_Hi');
 			

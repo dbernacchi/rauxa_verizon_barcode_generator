@@ -33,3 +33,10 @@ set .env DB_PORT to 3306
 set .env APP_URL to the right url
 
 Init Password - "rauxa#1"
+
+## Start Queue 
+
+Once the environment is running correctly you must start the job queue to insure that the background processes can be added to the queue. 
+
+From the site root run: 
+php artisan queue:work
