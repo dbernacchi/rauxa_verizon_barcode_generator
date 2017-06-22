@@ -30,6 +30,7 @@ class AddListsTable extends Migration
 	            $table->integer('last_num')->default(0);
 	            $table->char('file_init', 100)->nullable();
 	            $table->timestamp('datetime')->useCurrent();
+	            
 	        });
 		}
     }
