@@ -144,7 +144,7 @@ class GenerateController extends Controller
     				->orderBy('datetime', 'desc')
     				->get();
 	
-		if(!empty($get_last[0]->last_num)){
+		if(!empty($get_last[0]) && !empty($get_last[0]->last_num)){
 			
 			$start = $get_last[0]->last_num+1;
 			$startlen = strlen(trim($start));
