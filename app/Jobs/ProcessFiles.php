@@ -15,7 +15,7 @@ class ProcessFiles implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 	
-	
+	public $client_name;
 	public $vendor;
 	public $market;
 	public $action;
@@ -31,8 +31,9 @@ class ProcessFiles implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($vendor, $market, $action, $group_id, $barcode_id, $total, $split_num)
+    public function __construct($client_name, $vendor, $market, $action, $group_id, $barcode_id, $total, $split_num)
     {
+	    $this->client_name = $client_name;
         $this->vendor = $vendor;
         $this->market = $market;
         $this->action = $action;
@@ -57,6 +58,7 @@ class ProcessFiles implements ShouldQueue
 	    
 	   // Log::error('Test'.$this->vendor);
 	    
+	    $list['client_name'] 	= $this->client_name;
 	    $list['vendor'] 	= $this->vendor;
         $list['market'] 	= $this->market;;
         $list['action'] 	= $this->action;

@@ -393,7 +393,7 @@
 					<div class="modal-body">
 	
 						<div id="msg" class="alert" role="alert"></div>
-							<div class="row">
+							<div class="">
 								
 								<div class="form-group">
 									<label class="control-label" for="i_total">Old Password</label>

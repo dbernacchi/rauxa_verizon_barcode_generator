@@ -78,7 +78,7 @@ $(document).ready(function(){
 								
 								$.each(files, function(key, val){
 									console.log(val)
-									holder.append('<a class="file-icon" href="/storage/app/'+val.filename+'" target="_blank"><span class="fa fa-file"></span><span class="file-name">'+val.filename+'</span></a>');
+									holder.append('<a class="file-icon" href="/storage/'+val.filename+'" target="_blank"><span class="fa fa-file"></span><span class="file-name">'+val.filename+'</span></a>');
 								
 								});
 								

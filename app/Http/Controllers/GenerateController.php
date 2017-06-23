@@ -29,7 +29,7 @@ class GenerateController extends Controller
 
 			//Log::error('Previous to Dispatch');
 			
-			dispatch( new ProcessFiles( $list['vendor'], $list['market'], $list['action'], $list['group_id'], $list['barcode_id'], $list['total'], $list['split_num'] ) );
+			dispatch( new ProcessFiles($list['client_name'], $list['vendor'], $list['market'], $list['action'], $list['group_id'], $list['barcode_id'], $list['total'], $list['split_num'] ) );
 			
 			//Log::error('After Displatch');
 			
