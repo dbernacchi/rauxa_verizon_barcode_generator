@@ -27,7 +27,7 @@ class GenerateController extends Controller
 
 			$list = $request->all();
 
-			//Log::error('Previous to Dispatch');
+			Log::error($list['client_name']);
 			
 			dispatch( new ProcessFiles($list['client_name'], $list['vendor'], $list['market'], $list['action'], $list['group_id'], $list['barcode_id'], $list['total'], $list['split_num'] ) );
 			

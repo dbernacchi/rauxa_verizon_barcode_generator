@@ -138,7 +138,7 @@ class ProcessFiles implements ShouldQueue
 			->orderBy('datetime', 'desc')
 		    ->get();
 		
-		Log::error('DB:'.$get_last_num_gen);
+		//Log::error('DB:'.$get_last_num_gen);
 		
 		// Set $start variable
 		// If nothing exists in DB then start process at 0
@@ -162,7 +162,7 @@ class ProcessFiles implements ShouldQueue
 		    $str_temp = $start;
 		    		    		    
 		    $temp = str_pad($str_temp, $digits, '0', STR_PAD_LEFT);
-		    Log::info('Row:'.$temp);
+		   // Log::info('Row:'.$temp);
 		    $output->push($vendor.'~'.$area.'~'.$action.'~'.$groupID.'~'.$barcodeID.$temp);
 		    $output->all();
 		    
@@ -252,6 +252,8 @@ class ProcessFiles implements ShouldQueue
 			
 		$list['last_num'] = $last_num_gen;
 		$list['file_init'] = $filename1;
+		
+		Log::info($list);
 		
 		$newID = DB::table('rxa_lists')->insertGetId(
 		    $list
