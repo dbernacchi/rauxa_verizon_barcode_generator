@@ -162,7 +162,7 @@ class ProcessFiles implements ShouldQueue
 		    $str_temp = $start;
 		    		    		    
 		    $temp = str_pad($str_temp, $digits, '0', STR_PAD_LEFT);
-		   // Log::info('Row:'.$temp);
+		  
 		    $output->push($vendor.'~'.$area.'~'.$action.'~'.$groupID.'~'.$barcodeID.$temp);
 		    $output->all();
 		    
@@ -175,16 +175,13 @@ class ProcessFiles implements ShouldQueue
 	    // adjust for 0 based array key
 	    $last_num_gen = $start-1;
 	    
-	  //  Log::info('Last Number Generated:'.$last_num_gen);
 		
 		// Set Array Key's before it is shuffled to pull values for filename later.     		    
 	    $key_to_start = 0;
 		$key_to_half = $split-1;
 		$key_to_end = $max_total-1;
 		
-		//Log::info('Key to Start:'.$key_to_start);
-		//Log::info('Key to Half:'.$last_num_gen);
-		//Log::info('Key to End:'.$last_num_gen);
+
 		
 		// Set file names
 		
@@ -259,7 +256,6 @@ class ProcessFiles implements ShouldQueue
 		    $list
 		);
 		
-		//Log::info($list['file_init']);
 		
 		if(!empty($split)){
 			
@@ -272,7 +268,6 @@ class ProcessFiles implements ShouldQueue
 			     ['idlist' => $newID, 'filename' => $directory.$filename6.'.txt']
 			]);
 			
-			//Log::info('With Split');
 			
 		}else{
 			
@@ -283,7 +278,6 @@ class ProcessFiles implements ShouldQueue
 			     ['idlist' => $newID, 'filename' => $directory.$filename3.'.csv'],
 			]);
 			
-			//Log::info('Without Split');
 		}
 
         
