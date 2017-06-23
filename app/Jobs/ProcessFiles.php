@@ -250,7 +250,7 @@ class ProcessFiles implements ShouldQueue
 		$list['last_num'] = $last_num_gen;
 		$list['file_init'] = $filename1;
 		
-		Log::info($list);
+		//Log::info($list);
 		
 		$newID = DB::table('rxa_lists')->insertGetId(
 		    $list
