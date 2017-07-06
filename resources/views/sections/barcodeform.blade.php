@@ -3,13 +3,13 @@
 @section('navbar')
 
 	<a href="/lists/" class="btn btn-default navbar-btn">Browse Lists</a>
-				    	
+
 	<div class="btn-group navbar-btn">
-		
+
 		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			Admin <span class="caret"></span>
 		</button>
-		
+
 		<ul class="dropdown-menu">
 			<li><a href="#" rel="open-modal" data-target="#template-manage-markets">Markets</a></li>
 			<li><a href="#" rel="open-modal" data-target="#template-manage-actions">Actions</a></li>
@@ -17,7 +17,7 @@
 			<li role="separator" class="divider"></li>
 			<li><a href="#" rel="open-modal" data-target="#template-update-password">Update Password</a></li>
 		</ul>
-		
+
 	</div>
 
 @stop
@@ -33,11 +33,11 @@
 					<div class="modal-header">
 						<h4 class="modal-title">Barcode Generator</h4>
 					</div>
-					
+
 					<div class="modal-body">
-						
+
 						<div id="gen-msg" class="alert alert-warning" role="alert"></div>
-						
+
 						<div class="row">
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_client_name">Client Name</label>
@@ -51,7 +51,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="row">
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_vendor">Vendor</label>
@@ -70,7 +70,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="row">
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_vendor">Market</label>
@@ -80,7 +80,7 @@
 									    @foreach ($market_list as $market)
 									    	<option value="{{ $market->name }}" {{ !empty($list) && $market->name == $list[0]->market ? " selected" : "" }}>{{ $market->name }}</option>
 									    @endforeach
-									    
+
 								    </select>
 								</div>
 								<div class="col-md-1">
@@ -90,11 +90,11 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="row">
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_action">Action</label>
-						
+
 								<div class="col-md-8">
 									<select class="form-control input-sm" id="i_action" name="action" tabindex="4" required>
 									    <option value="">Select One</option>
@@ -110,7 +110,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="row">
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_action">Group ID</label>
@@ -125,12 +125,12 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="row">
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_barcode_id">Barcode ID</label>
 								<div class="col-md-8">
-									<input type="text" class="form-control input-sm" id="i_barcode_id" name="barcode_id" placeholder="Enter the Barcode ID" pattern="[a-zA-Z0-9_-]{1,20}" value="{{ !empty($list) ? $list[0]->barcode_id : '' }}" tabindex="6" required>
+									<input type="text" class="form-control input-sm" id="i_barcode_id" name="barcode_id" placeholder="Enter the Barcode ID" pattern="[A-Za-z0-9\S]{1,20}" value="{{ !empty($list) ? $list[0]->barcode_id : '' }}" tabindex="6" required>
 									<span class="barcode-id-cnt"></span>
 								</div>
 								<div class="col-md-1">
@@ -140,11 +140,11 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="row">
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_split_num">Split Codes Amount</label>
-							
+
 								<div class="col-md-8">
 									<input type="text" class="form-control input-sm" id="i_split_num" name="split_num" placeholder="(optional) Enter Number of codes to split between files" value="{{ !empty($list) ? $list[0]->split_num : '' }}" tabindex="7">
 								</div>
@@ -155,11 +155,11 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="row">
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_total">Total Codes</label>
-							
+
 								<div class="col-md-8">
 									<input type="text" class="form-control input-sm" id="i_total" name="total" placeholder="Enter Total Number of Codes to Generate" value="{{ !empty($list) ? $list[0]->total : '' }}" tabindex="8" required>
 								</div>
@@ -174,41 +174,41 @@
 					<div class="modal-footer">
 						<div class="form-group">
 							@if (!empty($file_list))
-							
+
 								<a href="/lists" class="btn btn-primary">Back To List</a>
-							
+
 							@else
 								<button type="submit" class="btn btn-primary">Generate Files</button>
 							@endif
 						</div>
-						
+
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="modal-dialog" id="file-wrap" style="{{ (!empty($file_list) ? 'display:block;' : 'display:none;') }}">
 				<div class="file-drawer">
 					<h3>Download Files</h3>
 					<div id="file-holder">
-						
+
 						@if (!empty($file_list))
-						
+
 							@foreach($file_list as $file)
-							
+
 								<a class="file-icon" href="/storage/{{ $file->filename }}" target="_blank">
 									<span class="fa fa-file"></span>
 									<span class="file-name">{{ $file->filename }}</span>
 								</a>
-							
+
 							@endforeach
-						
+
 						@endif
-						
+
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 	</form>
 
 @stop
@@ -226,19 +226,24 @@
 					<form action="/managelist/markets" method="post">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<div class="modal-body">
+						<div class="well">
+							Market names should be a one to two word phrase.
+							If followed by a colon, the abbreviation that follows will be used in the file naming convention.
+							Otherwise, the abbreviation will be taken from the first two letters of the first word.
+						</div>
 						<div id="msg" class="alert" role="alert"></div>
 						<div class="input-group">
-							
+
 							<input type="text" class="form-control input-sm" id="add-row-val" rel="add-row-val" value="" placeholder="Add a Market Name">
-							
+
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-success btn-sm" title="Click to Add" rel="add-row" data-target="#template-list-row">
 									<span class="fa fa-plus"></span>
 								</button>
 							</span>
 						</div>
-	
-						
+
+
 							<table id="markets-list-holder" class="table table-striped">
 								<tbody>
 									@foreach ($market_list as $market)
@@ -257,9 +262,9 @@
 									@endforeach
 								</tbody>
 							</table>
-						
+
 					</div>
-		
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						<button type="submit" class="btn btn-primary">Save List</button>
@@ -269,7 +274,7 @@
 			</div>
 		</div>
 	</script>
-	
+
 	<script id="template-manage-actions" type="text/template">
 		<div id="modal-manage-markets" class="modal fade" tabindex="-1" role="dialog" data-type="actions">
 			<div class="modal-dialog" role="document">
@@ -283,17 +288,17 @@
 						<div class="modal-body">
 							<div id="msg" class="alert" role="alert"></div>
 							<div class="input-group">
-								
+
 								<input type="text" class="form-control input-sm" id="add-row-val" rel="add-row-val" value="" placeholder="Add a Action Name">
-								
+
 								<span class="input-group-btn">
 									<button type="button" class="btn btn-success btn-sm" title="Click to Add" rel="add-row" data-target="#template-list-row">
 										<span class="fa fa-plus"></span>
 									</button>
 								</span>
 							</div>
-		
-							
+
+
 								<table id="actions-list-holder" class="table table-striped">
 									<tbody>
 										@foreach ($action_list as $action)
@@ -312,9 +317,9 @@
 										@endforeach
 									</tbody>
 								</table>
-							
+
 						</div>
-			
+
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							<button type="submit" class="btn btn-primary">Save List</button>
@@ -324,7 +329,7 @@
 			</div>
 		</div>
 	</script>
-	
+
 	<script id="template-manage-vendors" type="text/template">
 		<div id="modal-manage-markets" class="modal fade" tabindex="-1" role="dialog" data-type="vendors">
 			<div class="modal-dialog" role="document">
@@ -338,17 +343,17 @@
 					<div class="modal-body">
 						<div id="msg" class="alert" role="alert"></div>
 						<div class="input-group">
-							
+
 							<input type="text" class="form-control input-sm" id="add-row-val" rel="add-row-val" value="" placeholder="Add a Vendor Name">
-							
+
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-success btn-sm" title="Click to Add" rel="add-row" data-target="#template-list-row">
 									<span class="fa fa-plus"></span>
 								</button>
 							</span>
 						</div>
-	
-						
+
+
 							<table id="vendors-list-holder" class="table table-striped">
 								<tbody>
 									@foreach ($vendor_list as $vendor)
@@ -367,9 +372,9 @@
 									@endforeach
 								</tbody>
 							</table>
-						
+
 					</div>
-		
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						<button type="submit" class="btn btn-primary">Save List</button>
@@ -379,7 +384,7 @@
 			</div>
 		</div>
 	</script>
-	
+
 	<script id="template-update-password" type="text/template">
 		<div id="modal-manage-markets" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
@@ -391,29 +396,29 @@
 					<form action="/managepass" method="post">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<div class="modal-body">
-	
+
 						<div id="msg" class="alert" role="alert"></div>
 							<div class="">
-								
+
 								<div class="form-group">
 									<label class="control-label" for="i_total">Old Password</label>
 									<input type="text" class="form-control input-sm" id="oldP" name="oldP" value="" placeholder="Enter Your Old Password" required>
 								</div>
-							
+
 								<div class="form-group">
 									<label class="control-label" for="i_total">New Password</label>
 									<input type="text" class="form-control input-sm" id="newP" name="newP" value="" placeholder="Enter Your New Password" required>
 								</div>
-							
+
 								<div class="form-group">
 									<label class="control-label" for="i_total">Confirm New Password</label>
 									<input type="text" class="form-control input-sm" id="confP" name="confP" value="" placeholder="Enter New Password Again" required>
 								</div>
-									
+
 							</div>
-						
+
 					</div>
-		
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						<button type="submit" class="btn btn-primary">Update Password</button>
@@ -423,7 +428,7 @@
 			</div>
 		</div>
 	</script>
-	
+
 	<script id="template-list-row" type="text/template">
 		<tr>
 			<td class="form-row-input">
@@ -440,4 +445,3 @@
 	</script>
 
 @stop
-
