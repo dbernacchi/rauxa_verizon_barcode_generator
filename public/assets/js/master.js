@@ -148,26 +148,7 @@ $(document).ready(function(){
 
 		input_group.on('keyup', function(){
 
-			// var group_val 		= input_group.val(),
-			// 	groupid_parent 	= input_group.closest('div.form-group');
-			//
-			// if(!val_alpha_num(group_val)){
-			// 	input_group.val('');
-			// 	if(!groupid_parent.hasClass('has-warning'))
-			// 		 groupid_parent.addClass('has-warning');
-			// 	toggle_generator_form(true);
-			// 	frm_alert.text('<Group ID> can only contain 20 or less AlphaNumeric Characters.')
-			// 		.fadeIn(400);
-			// }else{
-			// 	if(groupid_parent.hasClass('has-warning'))
-			// 		 groupid_parent.removeClass('has-warning');
-			// 	toggle_generator_form(false);
-			// 	frm_alert.text('')
-			// 		.fadeOut(200);
-			//
-			// }
-
-		check_group_length();
+			check_group_length();
 
 		});
 
@@ -181,7 +162,7 @@ $(document).ready(function(){
 				if(!barid_parent.hasClass('has-warning'))
 					 barid_parent.addClass('has-warning');
 				toggle_generator_form(true);
-				frm_alert.text('Barcode ID can only contain AlphaNumeric Characters.')
+				frm_alert.text('<Barcode ID> can only contain 20 or less AlphaNumeric Characters.')
 					.fadeIn(400);
 			}else{
 				if(barid_parent.hasClass('has-warning'))

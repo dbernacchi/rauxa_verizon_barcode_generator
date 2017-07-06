@@ -140,7 +140,7 @@ class GenerateController extends Controller
 
 				$jsonResponse = (object)[
 					'errcode' => true,
-					'msg' => 'Generating '.$total.' codes will cause your character count to exceed the 20 character limit. Your <BarcodeID> is currently at {'.$barcodelen.'} characters. Try decreasing your <BarcodeID> by {'.$decrease.'} characters.',
+					'msg' => 'System cannot generate '.$total.' codes for this <Barcode ID>. Try changing the <Barcode ID> ID.',
 					'field' => 'group'
 				];
 
@@ -162,7 +162,7 @@ class GenerateController extends Controller
 
 				$jsonResponse = (object)[
 					'errcode' => true,
-					'msg' => 'Generating '.$total.' codes will cause your character count to exceed the 20 character limit.Your <BarcodeID> is currently at {'.$barcodelen.'} characters. Try decreasing your <BarcodeID> by {'.$decrease.'} characters.',
+					'msg' => 'Generating '.$total.' codes will cause your character count to exceed the 20 character limit.Your <Barcode ID> is currently at {'.$barcodelen.'} characters. Try decreasing your <Barcode ID> by {'.$decrease.'} characters.',
 					'field' => 'group'
 				];
 
@@ -176,6 +176,7 @@ class GenerateController extends Controller
 
 
 		}
+
 
 		return response()->json($jsonResponse);
 
