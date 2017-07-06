@@ -8,7 +8,7 @@ $(document).ready(function(){
 	if(frm_login.length > 0){
 
 		submit_form_push(frm_login, function(obj){
-
+			console.log(frm_login);
 			if(!obj.errcode){
 
 				window.location.href = "/home";
@@ -128,23 +128,23 @@ $(document).ready(function(){
 			check_codes();
 		});
 
-		// input_total.on('blur', function(){
-		//
-		// 	$(this).frmtNumberTypes({
-		// 		comma:true,
-		// 		type: 'number'
-		// 	});
-		//
-		// });
-		//
-		// input_total.on('focus', function(){
-		//
-		// 	$(this).frmtNumberTypes({
-		// 		comma:false,
-		// 		type: 'number'
-		// 	});
-		//
-		// });
+		input_total.on('blur', function(){
+
+			$(this).frmtNumberTypes({
+				comma:true,
+				type: 'number'
+			});
+
+		});
+
+		input_total.on('focus', function(){
+
+			$(this).frmtNumberTypes({
+				comma:false,
+				type: 'number'
+			});
+
+		});
 
 		input_group.on('keyup', function(){
 
@@ -423,9 +423,9 @@ function submit_form_push(frm, callback){
 		var $frm = $(frm),
 			msg = $frm.find('.alert');
 
-		if($frm[0].checkValidity()){
-			$frm.on('submit', function(event){
 
+			$frm.on('submit', function(event){
+				if($frm[0].checkValidity()){
 				event.preventDefault();
 
 				function showResponse(responseText) {
@@ -520,16 +520,12 @@ function submit_form_push(frm, callback){
 
 				}
 
-				// var stripnums = $frm.find('input.number');
-				//
-				// stripnums.each(function(){
-				//
-				// 	var num = $(this).frmtNumberTypes({
-				// 		comma:false,
-				// 		type: 'number'
-				// 	});
-				//
-				// });
+				if($('#i_total').length > 0){
+					$('#i_total').frmtNumberTypes({
+						comma:false,
+						type: 'number'
+					});
+				}
 
 				var options = {
 					type: 'POST',
@@ -537,9 +533,9 @@ function submit_form_push(frm, callback){
 				};
 
 				$frm.ajaxSubmit(options);
-
+				}
 			});
-		}
+
 
 	}
 
@@ -687,105 +683,105 @@ $.fn.open_modal = function(callback){
 // 	});
 // };
 //
-// $.fn.frmtNumberTypes = function(number, format) {
-//
-// 	var $this = this;
-//
-// 	if (typeof(number) === 'object') {
-// 		//incase just parameters are entered and not a number
-// 		var format = number;
-// 		number = ($this.is('input') ? $this.val() : $this.html());
-// 	}
-//
-// 	if(typeof format.comma == 'undefined'){
-// 		format.comma = (typeof format.commas != 'undefined' ? format.commas : false);
-// 	}
-//
-// 	var isnegative = false;
-//
-// 	//if(number != ''){
-// 		var format = format || {},
-// 			comma = format.comma,
-// 			symbol = format.symbol || "$",
-// 			type	 = format.type   || 'number';
-//
-// 		//console.log(format)
-// 		switch(type){
-//
-// 			case 'currency' :
-// 				number = stripCurrency(number);
-// 				break;
-//
-// 			case 'percent' :
-// 				number = (val_percent(number) ? stripPercent(number) : 0);
-// 				break;
-//
-// 			case 'number' :
-// 			default:
-// 				number = stripInteger(number);
-// 		}
-//
-// 		number = (number != '' ? parseFloat(number, 10) : parseFloat(0, 10));
-//
-// 		if (comma) {
-//
-//
-// 			var count = 0;
-// 			if(number < 0){
-// 				isnegative = true;
-// 				number = number.toString().replace('-','');
-// 			}
-//
-// 			var numArr = number.toString().split("");
-//
-// 			var len = numArr.length - 6;
-//
-// 			for (var i = len; i > 0; i= i - 3) {
-// 				numArr.splice(i,0,",");
-//
-// 			}
-//
-// 			number = numArr.join("");
-//
-// 			if(isnegative){
-// 				number = '-'+number;
-// 			}
-//
-// 		}
-//
-// 		if (typeof symbol === 'string') {
-//
-// 			switch(type){
-//
-// 				case 'currency' :
-// 					number = symbol + number;
-// 					break;
-//
-// 				case 'percent' :
-// 					number = number + symbol;
-// 					break;
-//
-// 				case 'number' :
-// 				default:
-// 					number = number;
-// 			}
-// 		}
-//
-// 		if($this.is('input')){
-// 			$this.val(number);
-// 		}else{
-// 			$this.html(number);
-// 		}
-//
-// 		return number;
-//
-//   };
-//
-//   var stripInteger = function(num){
-//   	if(typeof num != 'undefined'){
-//   		num = num.toString();
-//   		return num.replace(/[^0-9.-]/g, "")
-//   	}else{
-//   		return false;
-//   	}
-//   };
+$.fn.frmtNumberTypes = function(number, format) {
+
+	var $this = this;
+
+	if (typeof(number) === 'object') {
+		//incase just parameters are entered and not a number
+		var format = number;
+		number = ($this.is('input') ? $this.val() : $this.html());
+	}
+
+	if(typeof format.comma == 'undefined'){
+		format.comma = (typeof format.commas != 'undefined' ? format.commas : false);
+	}
+
+	var isnegative = false;
+
+	//if(number != ''){
+		var format = format || {},
+			comma = format.comma,
+			symbol = format.symbol || "$",
+			type	 = format.type   || 'number';
+
+		//console.log(format)
+		switch(type){
+
+			case 'currency' :
+				number = stripCurrency(number);
+				break;
+
+			case 'percent' :
+				number = (val_percent(number) ? stripPercent(number) : 0);
+				break;
+
+			case 'number' :
+			default:
+				number = stripInteger(number);
+		}
+
+		number = (number != '' ? parseInt(number) : parseInt(0));
+
+		if (comma) {
+
+
+			var count = 0;
+			if(number < 0){
+				isnegative = true;
+				number = number.toString().replace('-','');
+			}
+
+			var numArr = number.toString().split("");
+
+			var len = numArr.length - 3;
+
+			for (var i = len; i > 0; i= i - 3) {
+				numArr.splice(i,0,",");
+
+			}
+
+			number = numArr.join("");
+
+			if(isnegative){
+				number = '-'+number;
+			}
+
+		}
+
+		if (typeof symbol === 'string') {
+
+			switch(type){
+
+				case 'currency' :
+					number = symbol + number;
+					break;
+
+				case 'percent' :
+					number = number + symbol;
+					break;
+
+				case 'number' :
+				default:
+					number = number;
+			}
+		}
+
+		if($this.is('input')){
+			$this.val(number);
+		}else{
+			$this.html(number);
+		}
+
+		return number;
+
+  };
+
+  var stripInteger = function(num){
+  	if(typeof num != 'undefined'){
+  		num = num.toString();
+  		return num.replace(/[^0-9.-]/g, "")
+  	}else{
+  		return false;
+  	}
+  };
