@@ -1,42 +1,146 @@
+#Init Password - "rauxa#1"
+
+#Direct deployment
+
+##Requirements
+Ubuntu 16  
+
+  libmcrypt-dev  
+  mysql-client  
+  supervisor  
+  mcrypt  
+  pdo_mysql   
+  composer  
+
+MySQL 5.6  
+
+Nginx or Apache (there is an example nginx config file in docker/prod/)
+
+##Configuration
+
+copy terminal to new config file, located in the /etc dir:
+echo_supervisord_conf > /etc/supervisord.conf
+
+Add the following to the bottom of /etc/supervisord.conf  
+
+[program:laravel-worker]  
+process_name=%(program_name)s  
+command=php /var/www/artisan queue:work database --sleep=3 --tries=3  
+autostart=true  
+autorestart=true  
+numprocs=1  
+redirect_stderr=true  
+stdout_logfile=/var/www/storage/logs/worker.log  
+
+Restart supervisor  
+service supervisor restart  
+
+##Installation
+copy files to  /var/www
+
+chown -R www-data:www-data \
+        /var/www/storage \
+        /var/www/bootstrap/cache
+
+cd /var/www  
+composer install  
+composer update  
+php artisan config:cache  
+php artisan migrate  
+php artisan key:generate  
+php artisan optimize  
+
 #Local Docker deployment
 
 git clone https://github.com/dbernacchi/rauxa_verizon_barcode_generator.git
-make .env file
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=33061
-DB_DATABASE=rauxa
-DB_USERNAME=
-DB_PASSWORD=
-APP_KEY=
-APP_URL='http://localhost:8888'
 
 cd rauxa_verizon_barcode_generator
-composer install
-composer update
-php artisan migrate
-php artisan key:generate
-(make sure .env file has proper key value (not doubled)
-(make sure Docker is configured to share the project dir)
-docker-compose up -d
-docker ps
-docker exec -it [container id] bash
-php artisan config:clear
-php artisan config:cache
+
+add .env file to project root:
+
+  ####
+  #Laravel vars
+  ####
+
+  APP_DEBUG=true  
+  DB_CONNECTION=mysql  
+  DB_HOST=127.0.0.1  
+  DB_PORT=3306  
+  DB_DATABASE=rauxa  
+  DB_USERNAME=root  
+  DB_PASSWORD=<same pass>  
+  APP_KEY=base64:CHANGEME!08dvKjVflcu7vXCDpMfvg30VdebBGiX444=  
+  APP_URL=http://localhost:8888  
+
+  ####
+  #Docker database vars
+  ####
+
+  MYSQL_DATABASE=rauxa  
+  MYSQL_USER=root  
+  MYSQL_PASSWORD=<same pass>  
+  MYSQL_ROOT_PASSWORD=<same pass>  
+
+composer install  
+composer update  
+
+(make sure Docker is configured to share the project dir)  
+docker-compose -f docker/dev/docker-compose.dev.yml up
+
+gotta run this after everything is up
+docker-compose -f docker/dev/docker-compose.dev.yml exec app service supervisor restart
+docker-compose -f docker/dev/docker-compose.dev.yml exec app supervisorctl start laravel-worker:*  
+
+to get into servers:
+docker ps  
+docker exec -it [container id] bash  
+
+##To restart the process that generates files (required if you make changes to the process)
+
+docker-compose -f docker/dev/docker-compose.dev.yml exec app supervisorctl reread  
+docker-compose -f docker/dev/docker-compose.dev.yml exec app supervisorctl update  
+docker-compose -f docker/dev/docker-compose.dev.yml exec app supervisorctl start laravel-worker:*  
 
 #Production/Staging Docker deployment
 
-be sure to create the database
-same as Local
-set .env DB_PORT to 3306
-set .env APP_URL to the right url
+git clone https://github.com/dbernacchi/rauxa_verizon_barcode_generator.git
 
-Init Password - "rauxa#1"
+cd rauxa_verizon_barcode_generator
 
-## Start Queue 
+add .env file to project root:
 
-Once the environment is running correctly you must start the job queue to insure that the background processes can be added to the queue. 
+  ####
+  #Laravel vars
+  ####
 
-From the site root run: 
-php artisan queue:work
+  APP_DEBUG=true  
+  DB_CONNECTION=mysql  
+  DB_HOST=127.0.0.1  
+  DB_PORT=3306  
+  DB_DATABASE=rauxa  
+  DB_USERNAME=root  
+  DB_PASSWORD=<same pass>  
+  APP_KEY=base64:CHANGEME!08dvKjVflcu7vXCDpMfvg30VdebBGiX444=  
+  APP_URL=http://localhost:8888  
+
+  ####
+  #Docker database vars
+  ####
+
+  MYSQL_DATABASE=rauxa  
+  MYSQL_USER=root  
+  MYSQL_PASSWORD=<same pass>  
+  MYSQL_ROOT_PASSWORD=<same pass>  
+
+docker-compose -f docker/prod/docker-compose.prod.yml up -d
+
+gotta run this after everything is up
+docker-compose -f docker/prod/docker-compose.prod.yml exec app service supervisor restart  
+docker-compose -f docker/prod/docker-compose.prod.yml exec app supervisorctl start laravel-worker:*  
+
+##notes on ssl
+
+replace docker/prod/vhost.conf with docker/prod/vhost.conf.ssl  
+modify docker/prod/docker-compose.prod.yml ports to map 443
+modify docker/prod/docker-compose.prod.yml volumes to map in proper cert and key
+modify the certificate lines  7 and 8 to point to the proper cert and key

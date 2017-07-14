@@ -1,0 +1,33 @@
+version: '2'
+services:
+
+  #  The Application
+  app:
+    build:
+      context: ../../
+      dockerfile: ./docker/prod/app.prod.dockerfile
+    working_dir: /var/www
+    volumes:
+      - ../../storage:/var/www/storage 
+    env_file:
+      - ../../.env
+
+  # The Web Server
+  web:
+    build:
+      context: ../../
+      dockerfile: ./docker/prod/web.prod.dockerfile
+    working_dir: /var/www
+    ports:
+      - 8080:80 #NOTE: to test prod deploy on dev machine, need to change this line from 80:80 to 8080:80
+      #- 443:443
+    #volumes:
+      #- "${LE_DIR}:/etc/letsencrypt"
+
+  # The Database
+  database:
+    image: mysql:5.6
+    volumes:
+      - ../../storage/dbdata:/var/lib/mysql
+    env_file:
+      - ../../.env

@@ -70,7 +70,7 @@ class GenerateController extends Controller
 
 			$newfile = $id[0]->file_init;
 
-			if(Storage::disk('local')->has($directory.$newfile.'.txt')){
+			if(Storage::disk('local')->has('public/'.$directory.$newfile.'.txt')){
 
 				$files = DB::table('rxa_files')
 					->select('filename')

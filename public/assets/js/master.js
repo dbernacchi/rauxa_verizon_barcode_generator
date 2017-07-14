@@ -744,7 +744,9 @@ $.fn.frmtNumberTypes = function(number, format) {
 
 				case 'number' :
 				default:
-					number = number;
+					if(number == 0){
+						number = "";
+					}
 			}
 		}
 
