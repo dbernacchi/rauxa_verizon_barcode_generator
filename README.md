@@ -132,11 +132,11 @@ add .env file to project root:
   MYSQL_PASSWORD=<same pass>  
   MYSQL_ROOT_PASSWORD=<same pass>  
 
-docker-compose -f docker/prod/docker-compose.prod.yml up -d
+sudo docker-compose -f docker/prod/docker-compose.prod.yml up -d
 
 gotta run this after everything is up
-docker-compose -f docker/prod/docker-compose.prod.yml exec app service supervisor restart  
-docker-compose -f docker/prod/docker-compose.prod.yml exec app supervisorctl start laravel-worker:*  
+sudo docker-compose -f docker/prod/docker-compose.prod.yml exec app service supervisor restart  
+sudo docker-compose -f docker/prod/docker-compose.prod.yml exec app supervisorctl start laravel-worker:*  
 
 ##notes on ssl
 
