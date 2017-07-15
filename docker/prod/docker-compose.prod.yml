@@ -11,9 +11,6 @@ services:
       - ../../storage:/var/www/storage
     env_file:
       - ../../.env
-    depends_on:
-      db:
-        condition: service_healthy
 
   # The Web Server
   web:
@@ -34,8 +31,3 @@ services:
       - ../../storage/dbdata:/var/lib/mysql
     env_file:
       - ../../.env
-    healthcheck:
-      test: mysqladmin -uroot -ppassword ping
-      interval: 2s
-      timeout: 5s
-      retries: 30
