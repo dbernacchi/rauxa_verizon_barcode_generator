@@ -10,8 +10,5 @@ done
 
 php artisan migrate
 
-service supervisor restart
-supervisorctl start laravel-worker:*
-
 php-fpm
 tail -f /dev/null

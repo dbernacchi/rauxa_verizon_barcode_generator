@@ -135,7 +135,6 @@ add .env file to project root:
 sudo docker-compose -f docker/prod/docker-compose.prod.yml up -d
 
 gotta run this after everything is up
-docker-compose -f docker/prod/docker-compose.prod.yml exec app php artisan migrate
 sudo docker-compose -f docker/prod/docker-compose.prod.yml exec app service supervisor restart  
 sudo docker-compose -f docker/prod/docker-compose.prod.yml exec app supervisorctl start laravel-worker:*  
 
