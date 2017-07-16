@@ -85,7 +85,8 @@ composer install
 composer update  
 
 (make sure Docker is configured to share the project dir)  
-docker-compose -f docker/dev/docker-compose.dev.yml up
+docker-compose -f docker/dev/docker-compose.dev.yml up -d
+(add --build to end to rebuild)
 
 gotta run this after everything is up
 docker-compose -f docker/dev/docker-compose.dev.yml exec app service supervisor restart
