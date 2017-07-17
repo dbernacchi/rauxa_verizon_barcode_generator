@@ -3,12 +3,14 @@ var $ = jQuery.noConflict();
 $(document).ready(function(){
 
 	var frm_generator = $('#frm-generator'),
-		frm_login = $('#frm-login');
+		frm_login = $('#frm-login'),
+		form_wrap = $('#form-wrap'),
+		loader = $('.loader');
 
 	if(frm_login.length > 0){
 
 		submit_form_push(frm_login, function(obj){
-			console.log(frm_login);
+
 			if(!obj.errcode){
 
 				window.location.href = "/home";
@@ -18,7 +20,12 @@ $(document).ready(function(){
 	}
 
 	var val_alpha_num = function(obj){
-		var regex = /^[A-Za-z0-9 ]{0,20}$/;
+		var regex = /^[A-Za-z0-9\-_]{0,20}$/;
+		return (!regex.test(obj) ? false : true);
+	};
+
+	var val_num = function(obj){
+		var regex = /^[0-9]{0,20}$/;
 		return (!regex.test(obj) ? false : true);
 	};
 
@@ -30,25 +37,34 @@ $(document).ready(function(){
 			input_barcode = $('#i_barcode_id'),
 			input_split = $('#i_split_num')
 			input_total = $('#i_total'),
-			form_wrap = $('#form-wrap'),
-			loader = $('.loader');
+			btn = frm_generator.find('button[type="submit"]'),
+			barcode_val 	= input_barcode.val(),
+			group_val 		= input_group.val(),
+			total_val 		= input_total.val(),
+			split_val		= input_split.val();
 
-		check_group_length();
-		check_codes();
 
-		frm_generator.find('button[type="submit"]').on('mouseup', function(){
 
-			loader.fadeIn(100, function(){
-				form_wrap.fadeOut(400);
-			})
-		});
+		// check_group_length();
+		// check_codes();
+
+		btn.prop('disabled',true);
+
+		// frm_generator.find('button[type="submit"]').on('mouseup', function(){
+		//
+		// 	// loader.fadeIn(100, function(){
+		// 	// 	form_wrap.fadeOut(400);
+		// 	// })
+		// });
 
 		submit_form_push(frm_generator, function(obj){
 
-			var file_wrap = $('#file-wrap'),
-				loader = $('.loader');
-
+			var file_wrap = $('#file-wrap');
 			var holder = $('#file-holder');
+
+			loader.fadeIn(100, function(){
+				form_wrap.fadeOut(400);
+			});
 
 			//console.log(obj);
 			$i = 1;
@@ -97,7 +113,6 @@ $(document).ready(function(){
 
 				checkfiles();
 
-
 			}
 
 		});
@@ -108,17 +123,23 @@ $(document).ready(function(){
 				form_group = $this.closest('div.form-group'),
 				this_val = parseInt($this.val()),
 				len = this_val.length,
-				total_val =  parseInt(input_total.val());
+				total_val = input_total.val().toString().replace(',',''),
+				total_val =  parseInt(total_val);
 
-			if(this_val*2 > total_val){
+			if(!val_num($this.val())){
+
+				alert_split(true, true);
+				toggle_generator_form(true);
+
+			}else if(this_val*2 > total_val){
 
 				alert_split(true);
-				//toggle_generator_form(false);
+				toggle_generator_form(false);
 
 			}else{
 
 				alert_split(false);
-				//toggle_generator_form(true);
+				toggle_generator_form(true);
 
 			}
 		});
@@ -154,28 +175,30 @@ $(document).ready(function(){
 
 		input_barcode.on('keyup', function(){
 
-			var barcode_val 	= input_barcode.val(),
+			var barcode_val = input_barcode.val(),
 				barid_parent 	= input_barcode.closest('div.form-group');
 
 			if(!val_alpha_num(barcode_val)){
 				//input_barcode.val('');
 				if(!barid_parent.hasClass('has-warning'))
 					 barid_parent.addClass('has-warning');
-				toggle_generator_form(true);
-				frm_alert.text('<Barcode ID> can only contain 20 or less AlphaNumeric Characters.')
-					.fadeIn(400);
+					 toggle_generator_form(true);
+					frm_alert.text('<Barcode ID> can only contain 20 or less AlphaNumeric Characters.')
+						.fadeIn(50);
+
 			}else{
+				check_codes();
+
 				if(barid_parent.hasClass('has-warning'))
 					 barid_parent.removeClass('has-warning');
-				toggle_generator_form(false);
-				frm_alert.text('')
-					.fadeOut(200);
-				check_codes();
+					//toggle_generator_form(false);
+					frm_alert.text('')
+						.fadeOut(50);
+
+
 			}
 
 		});
-
-
 
 		function check_group_length(){
 
@@ -195,7 +218,7 @@ $(document).ready(function(){
 
 				if(frm_alert.is(':visible'))
 					frm_alert.text('')
-						.fadeOut(100);
+						.fadeOut(50);
 
 				if(groupid_parent.hasClass('has-warning'))
 					 groupid_parent.removeClass('has-warning');
@@ -213,9 +236,6 @@ $(document).ready(function(){
 				barid_parent 	= input_barcode.closest('div.form-group'),
 				total_parent 	= input_total.closest('div.form-group');;
 
-
-
-
 				if(group_val != '' && barcode_val != '' && total_val != ''){
 
 					$.get('/check_codes/'+group_val+'/'+barcode_val+'/'+total_val, function(arr){
@@ -224,7 +244,7 @@ $(document).ready(function(){
 
 							if(arr.msg)
 								frm_alert.text(arr.msg)
-									.fadeIn(400);
+									.fadeIn(50);
 
 							if(!total_parent.hasClass('has-warning'))
 								 total_parent.addClass('has-warning');
@@ -232,15 +252,13 @@ $(document).ready(function(){
 							if(!barid_parent.hasClass('has-warning'))
 								 barid_parent.addClass('has-warning');
 
-
-
 							toggle_generator_form(true);
 
 						}else{
 
 							if(frm_alert.is(':visible'))
 								frm_alert.text('')
-									.fadeOut(200);
+									.fadeOut(50);
 
 							if(total_parent.hasClass('has-warning'))
 								 total_parent.removeClass('has-warning');
@@ -256,55 +274,17 @@ $(document).ready(function(){
 
 		}
 
-/*
-	var alert_codes = function(status, alert){
-
-		var barid_input 	= $('#i_barcode_id'),
-			barid_parent 	= barid_input.closest('div.form-group'),
-			total_input 	= $('#i_total'),
-			total_parent 	= total_input.closest('div.form-group');
-
-		if(status){
-
-			frm_alert.text(alert)
-				.fadeIn(400);
-
-			if(!total_parent.hasClass('has-warning'))
-				 total_parent.addClass('has-warning');
-
-			if(!barid_parent.hasClass('has-warning'))
-				 barid_parent.addClass('has-warning');
-
-		}else{
-
-			if(frm_alert.is(':visible'))
-				frm_alert.text('')
-					.fadeOut(200);
-
-			if(total_parent.hasClass('has-warning'))
-				 total_parent.removeClass('has-warning');
-
-			if(barid_parent.hasClass('has-warning'))
-				 barid_parent.removeClass('has-warning');
-
-		}
-
-	}
-*/
-
-
-
 		var alert_split = function(status){
 
 			var split_input = $('#i_split_num'),
 				split_parent 	= split_input.closest('div.form-group');
 
-			var alert_adjust = 'The split amount must be less than or equal to half of the total number of codes.';
+			var alert_adjust = (typeof val_err != 'undefined' && val_err ? 'Split Code Amount can only contain numeric characters.' : 'The split amount must be less than or equal to half of the total number of codes.');
 
 			if(status){
 
 				frm_alert.text(alert_adjust)
-					.fadeIn(400);
+					.fadeIn(50);
 
 				if(!split_parent.hasClass('has-warning'))
 					 split_parent.addClass('has-warning');
@@ -313,7 +293,7 @@ $(document).ready(function(){
 
 				if(frm_alert.is(':visible'))
 					frm_alert.text('')
-						.fadeOut(400);
+						.fadeOut(50);
 
 				if(split_parent.hasClass('has-warning'))
 					 split_parent.removeClass('has-warning');
@@ -324,7 +304,8 @@ $(document).ready(function(){
 
 		function toggle_generator_form(status){
 
-			var btn = frm_generator.find('button[type="submit"]');
+			// var btn = frm_generator.find('button[type="submit"]');
+
 			if(status){
 				btn.prop('disabled',true);
 			}else{
@@ -401,124 +382,126 @@ $(document).ready(function(){
 
 function submit_form_push(frm, callback){
 
-		var $frm = $(frm),
-			msg = $frm.find('.alert');
+	var $frm = $(frm),
+		msg = $frm.find('.alert');
 
+	$frm.on('submit', function(event){
 
-			$frm.on('submit', function(event){
-				if($frm[0].checkValidity()){
-				event.preventDefault();
+		console.log($frm[0].checkValidity());
 
-				function showResponse(responseText) {
+		if($frm[0].checkValidity()){
 
-					var arr = responseText;
+			event.preventDefault();
 
-					if(!arr.errcode){
+			function showResponse(responseText) {
 
-						if(arr.msg){
-							if(msg.hasClass('alert-danger')){
+				var arr = responseText;
 
-								msg.text(arr.msg)
-									.removeClass('alert-danger')
-									.addClass('alert-success')
-									.fadeIn(400, function(){
-										if(typeof callback === 'function'){
-											var wait = setTimeout(function(){
-												callback(arr);
-												clearTimeout(wait);
-											}, 1000);
-										}
+				if(!arr.errcode){
 
-									});
+					if(arr.msg){
+						if(msg.hasClass('alert-danger')){
 
-							}else{
+							msg.text(arr.msg)
+								.removeClass('alert-danger')
+								.addClass('alert-success')
+								.fadeIn(400, function(){
+									if(typeof callback === 'function'){
+										var wait = setTimeout(function(){
+											callback(arr);
+											clearTimeout(wait);
+										}, 1000);
+									}
 
-								msg.text(arr.msg)
-									.addClass('alert-success')
-									.fadeIn(400, function(){
-										if(typeof callback === 'function'){
-											var wait = setTimeout(function(){
-												callback(arr);
-												clearTimeout(wait);
-											}, 1000);
-										}
+								});
 
-									});
-
-							}
 						}else{
-							if(typeof callback === 'function'){
-											var wait = setTimeout(function(){
-												callback(arr);
-												clearTimeout(wait);
-											}, 1000);
-										}
-						}
 
+							msg.text(arr.msg)
+								.addClass('alert-success')
+								.fadeIn(400, function(){
+									if(typeof callback === 'function'){
+										var wait = setTimeout(function(){
+											callback(arr);
+											clearTimeout(wait);
+										}, 1000);
+									}
+
+								});
+
+						}
 					}else{
+						if(typeof callback === 'function'){
+										var wait = setTimeout(function(){
+											callback(arr);
+											clearTimeout(wait);
+										}, 1000);
+									}
+					}
 
-						if(arr.msg){
-							if(msg.hasClass('alert-success')){
+				}else{
 
-								msg.text(arr.msg)
-									.removeClass('alert-success')
-									.addClass('alert-danger')
-									.fadeIn(400, function(){
-										if(typeof callback === 'function'){
-											var wait = setTimeout(function(){
-												callback(arr);
-												clearTimeout(wait);
-											}, 1000);
-										}
+					if(arr.msg){
+						if(msg.hasClass('alert-success')){
 
-									});
+							msg.text(arr.msg)
+								.removeClass('alert-success')
+								.addClass('alert-danger')
+								.fadeIn(400, function(){
+									if(typeof callback === 'function'){
+										var wait = setTimeout(function(){
+											callback(arr);
+											clearTimeout(wait);
+										}, 1000);
+									}
 
-							}else{
+								});
 
-								msg.text(arr.msg)
-									.addClass('alert-danger')
-									.fadeIn(400, function(){
-										if(typeof callback === 'function'){
-											var wait = setTimeout(function(){
-												callback(arr);
-												clearTimeout(wait);
-											}, 1000);
-										}
-
-									});
-
-							}
 						}else{
-							if(typeof callback === 'function'){
-											var wait = setTimeout(function(){
-												callback(arr);
-												clearTimeout(wait);
-											}, 1000);
-										}
-						}
 
+							msg.text(arr.msg)
+								.addClass('alert-danger')
+								.fadeIn(400, function(){
+									if(typeof callback === 'function'){
+										var wait = setTimeout(function(){
+											callback(arr);
+											clearTimeout(wait);
+										}, 1000);
+									}
+
+								});
+
+						}
+					}else{
+						if(typeof callback === 'function'){
+										var wait = setTimeout(function(){
+											callback(arr);
+											clearTimeout(wait);
+										}, 1000);
+									}
 					}
 
 				}
 
-				if($('#i_total').length > 0){
-					$('#i_total').frmtNumberTypes({
-						comma:false,
-						type: 'number'
-					});
-				}
+			}
 
-				var options = {
-					type: 'POST',
-					success : showResponse
-				};
+			if($('#i_total').length > 0){
+				$('#i_total').frmtNumberTypes({
+					comma:false,
+					type: 'number'
+				});
+			}
 
-				$frm.ajaxSubmit(options);
-				}
-			});
+			var options = {
+				type: 'POST',
+				success : showResponse
+			};
 
+			$frm.ajaxSubmit(options);
+		}
+	});
 
-	}
+}
 
 var handleTemplate = function(name){
 
@@ -680,7 +663,7 @@ $.fn.frmtNumberTypes = function(number, format) {
 
 	var isnegative = false;
 
-	//if(number != ''){
+	if(number != ''){
 		var format = format || {},
 			comma = format.comma,
 			symbol = format.symbol || "$",
@@ -742,9 +725,10 @@ $.fn.frmtNumberTypes = function(number, format) {
 					number = number + symbol;
 					break;
 
-				case 'number' :
-				default:
-					number = number;
+				// case 'number' :
+				// default:
+				// console.log((number === 0 || number === ''));
+				// 	number = (number === 0 ? '' : number);
 			}
 		}
 
@@ -753,6 +737,7 @@ $.fn.frmtNumberTypes = function(number, format) {
 		}else{
 			$this.html(number);
 		}
+	}
 
 		return number;
 

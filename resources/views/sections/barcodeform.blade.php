@@ -24,7 +24,7 @@
 
 @section('main-body')
 
-	<form id="frm-generator" action="/generate" method="post">
+	<form id="frm-generator" action="/generate" method="post" autocomplete="off">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		<div class="container form-wrap">
 			<div class="loader"><img src="/assets/img/default.gif"></div>

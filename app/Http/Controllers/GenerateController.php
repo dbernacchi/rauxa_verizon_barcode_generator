@@ -140,7 +140,7 @@ class GenerateController extends Controller
 
 				$jsonResponse = (object)[
 					'errcode' => true,
-					'msg' => 'System cannot generate '.$total.' codes for this <Barcode ID>. Try changing the <Barcode ID> ID.',
+					'msg' => 'System cannot generate '.$total.' codes for this <Barcode ID>. Try changing the <Barcode ID>.',
 					'field' => 'group'
 				];
 
