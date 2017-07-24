@@ -115,7 +115,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_action">Group ID</label>
 								<div class="col-md-8">
-									<input type="text" class="form-control input-sm" id="i_group_id" name="group_id" placeholder="Enter the Group ID" pattern="[a-zA-Z0-9_-]{1,20}" value="{{ !empty($list) ? $list[0]->group_id : '' }}" tabindex="5" required>
+									<input type="text" class="form-control input-sm" id="i_group_id" name="group_id" placeholder="only alpha/numeric (no symbols) and a max of 20 characters" pattern="[a-zA-Z0-9_-]{1,20}" value="{{ !empty($list) ? $list[0]->group_id : '' }}" tabindex="5" required>
 									<span class="group-id-cnt"></span>
 								</div>
 								<div class="col-md-1">
@@ -130,7 +130,7 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label" for="i_barcode_id">Barcode ID</label>
 								<div class="col-md-8">
-									<input type="text" class="form-control input-sm" id="i_barcode_id" name="barcode_id" placeholder="Enter the Barcode ID" pattern="[A-Za-z0-9\S]{1,20}" value="{{ !empty($list) ? $list[0]->barcode_id : '' }}" tabindex="6" required>
+									<input type="text" class="form-control input-sm" id="i_barcode_id" name="barcode_id" placeholder="only alpha/numeric (no symbols)" pattern="[A-Za-z0-9\S]{1,20}" value="{{ !empty($list) ? $list[0]->barcode_id : '' }}" tabindex="6" required>
 									<span class="barcode-id-cnt"></span>
 								</div>
 								<div class="col-md-1">

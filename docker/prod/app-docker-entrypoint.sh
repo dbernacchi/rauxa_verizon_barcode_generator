@@ -4,7 +4,7 @@ php artisan cache:clear
 php artisan config:clear
 php artisan storage:link
 
-while ! mysqladmin ping -h database --silent; do
+while ! mysqladmin ping -h rauxa_database --silent; do
     sleep 1
 done
 

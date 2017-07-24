@@ -2,7 +2,7 @@ version: '2'
 services:
 
   # The Application
-  app:
+  rauxa_app:
     build:
       context: ./
       dockerfile: app.dev.dockerfile
@@ -13,18 +13,18 @@ services:
       - ../../.env
 
   # The Web Server
-  web:
+  rauxa_web:
     build:
       context: ./
       dockerfile: web.dev.dockerfile
     working_dir: /var/www
     volumes_from:
-      - app
+      - rauxa_app
     ports:
       - 8080:80
 
   # The Database
-  database:
+  rauxa_database:
     image: mysql:5.6
     volumes:
       - dbdata:/var/lib/mysql

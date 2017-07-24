@@ -21,6 +21,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 #    && php composer.phar install --no-dev --no-scripts \
 #    && rm composer.phar
 
+COPY ./docker/prod/app-docker-entrypoint.sh /var/www/docker/prod/app-docker-entrypoint.sh
+
 COPY . /var/www
 
 RUN chown -R www-data:www-data /var/www/bootstrap/cache
