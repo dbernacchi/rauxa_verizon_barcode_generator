@@ -1,6 +1,8 @@
 #Init Password - "rauxa#1"
 
+#####
 #Direct deployment
+#####
 
 ##Requirements
 Ubuntu 16  
@@ -15,6 +17,7 @@ Ubuntu 16
 MySQL 5.6  
 
 Nginx or Apache (there is an example nginx config file in docker/prod/)
+Note the need to force csv, txt, UNL files to download
 
 ##Configuration
 
@@ -50,7 +53,39 @@ php artisan migrate
 php artisan key:generate  
 php artisan optimize  
 
+add .env file to project root:
+
+  ####
+  #Laravel vars
+  ####
+
+  APP_DEBUG=true  
+  DB_CONNECTION=mysql  
+  DB_HOST=127.0.0.1  
+  DB_PORT=3306  
+  DB_DATABASE=rauxa  
+  DB_USERNAME=root  
+  DB_PASSWORD=<same pass>  
+  APP_KEY=base64:CHANGEME!08dvKjVflcu7vXCDpMfvg30VdebBGiX444=  
+  APP_URL=http://localhost:8888  
+
+  ####
+  #Docker database vars
+  ####
+
+  MYSQL_DATABASE=rauxa  
+  MYSQL_USER=root  
+  MYSQL_PASSWORD=<same pass>  
+  MYSQL_ROOT_PASSWORD=<same pass>  
+
+
+
+
+
+
+#####
 #Local Docker deployment
+#####
 
 git clone https://github.com/dbernacchi/rauxa_verizon_barcode_generator.git
 
@@ -89,8 +124,8 @@ docker-compose -f docker/dev/docker-compose.dev.yml up -d
 (add --build to end to rebuild)
 
 gotta run this after everything is up
-docker-compose -f docker/dev/docker-compose.dev.yml exec app service supervisor restart
-docker-compose -f docker/dev/docker-compose.dev.yml exec app supervisorctl start laravel-worker:*  
+docker-compose -f docker/dev/docker-compose.dev.yml exec rauxa_app service supervisor restart
+docker-compose -f docker/dev/docker-compose.dev.yml exec rauxa_app supervisorctl start laravel-worker:*  
 
 to get into servers:
 docker ps  
@@ -98,11 +133,17 @@ docker exec -it [container id] bash
 
 ##To restart the process that generates files (required if you make changes to the process)
 
-docker-compose -f docker/dev/docker-compose.dev.yml exec app supervisorctl reread  
-docker-compose -f docker/dev/docker-compose.dev.yml exec app supervisorctl update  
-docker-compose -f docker/dev/docker-compose.dev.yml exec app supervisorctl start laravel-worker:*  
+docker-compose -f docker/dev/docker-compose.dev.yml exec rauxa_app supervisorctl reread  
+docker-compose -f docker/dev/docker-compose.dev.yml exec rauxa_app supervisorctl update  
+docker-compose -f docker/dev/docker-compose.dev.yml exec rauxa_app supervisorctl start laravel-worker:*  
 
+#####
 #Production/Staging Docker deployment
+#####
+
+
+
+
 
 git clone https://github.com/dbernacchi/rauxa_verizon_barcode_generator.git
 
@@ -136,8 +177,8 @@ add .env file to project root:
 sudo docker-compose -f docker/prod/docker-compose.prod.yml up -d
 
 gotta run this after everything is up
-sudo docker-compose -f docker/prod/docker-compose.prod.yml exec app service supervisor restart  
-sudo docker-compose -f docker/prod/docker-compose.prod.yml exec app supervisorctl start laravel-worker:*  
+sudo docker-compose -f docker/prod/docker-compose.prod.yml exec rauxa_app service supervisor restart  
+sudo docker-compose -f docker/prod/docker-compose.prod.yml exec rauxa_app supervisorctl start laravel-worker:*  
 
 ##notes on ssl
 
