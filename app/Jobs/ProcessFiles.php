@@ -123,7 +123,7 @@ class ProcessFiles implements ShouldQueue
 	    $list['gid'] = $grouplen;
 	    $list['bid'] = $barcodelen;
 
-	    $split = (!empty($this->split_num) ? $this->split_num : NULL);
+	    $split = (!empty($this->split_num) ? $this->split_num : $total+1);
 
 
 
