@@ -128,6 +128,10 @@ to get into servers:
 docker ps  
 docker exec -it [container id] bash  
 
+##**** ON staging docker should use /bin/sh instead of bash ****#
+
+### Make sure to add a symlink on BOTH the Web and App instance of docker or the files will not work correctly ###
+
 ## To restart the process that generates files (required if you make changes to the process)
 
 docker-compose -f docker/dev/docker-compose.dev.yml exec rauxa_app supervisorctl reread  
