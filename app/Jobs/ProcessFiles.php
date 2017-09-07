@@ -188,7 +188,7 @@ class ProcessFiles implements ShouldQueue
 		$filename1 = $vendor.'_'.date('Ymd_Hi');
 		$filename3 = $groupID.'_'.$barcodeID.'_'.$total.'_'.$vendor.'_'.date('Ymd_Hi');
 
-		if(!empty($split)){
+		if($split < ($total + 1)){
 			$filename5 = $groupID.'_'.$barcodeID.'_'.substr($output[$key_to_start], '-'.$digits).'_'.substr($output[$key_to_half], '-'.$digits).'_'.$total.'_'.$vendor.'_'.date('Ymd_Hi');
 			$filename6 = $groupID.'_'.$barcodeID.'_'.substr($output[$key_to_half+1], '-'.$digits).'_'.substr($output[$key_to_end], '-'.$digits).'_'.$total.'_'.$vendor.'_'.date('Ymd_Hi');
 		}
@@ -237,10 +237,10 @@ class ProcessFiles implements ShouldQueue
 	    $codeFile3 = Storage::disk('local')->put('public/'.$directory.$filename3.'.txt', $splitTemp);
 	    $codeFile4 = Storage::disk('local')->put('public/'.$directory.$filename3.'.csv', $csvTemp);
 
-	    if(!empty($split)){
+	    if($split < ($total + 1)){
 		    $codeFile5 = Storage::disk('local')->put('public/'.$directory.$filename5.'.txt', $splitTemp);
-			$codeFile6 = Storage::disk('local')->put('public/'.$directory.$filename6.'.txt', $splitTemp2);
-		}
+				$codeFile6 = Storage::disk('local')->put('public/'.$directory.$filename6.'.txt', $splitTemp2);
+			}
 
 
 		unset($list['_token']);
@@ -257,7 +257,7 @@ class ProcessFiles implements ShouldQueue
 		);
 
 
-		if(!empty($split)){
+		if($split < ($total + 1)){
 
 			DB::table('rxa_files')->insert([
 			    ['idlist' => $newID, 'filename' => $directory.$filename1.'.UNL'],
